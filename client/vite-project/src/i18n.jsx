@@ -1,0 +1,215 @@
+import { useEffect, useMemo, useState } from "react";
+import { LanguageContext } from "./language-context.js";
+
+const translations = {
+    tr: {
+        "seo.description": "777 Lounge — lezzet, keyif ve güzel anlar için.",
+        "nav.language": "Dil seçimi",
+        "nav.home": "Ana Sayfa",
+        "nav.about": "Hakkımızda",
+        "nav.menu": "Menü",
+        "nav.reservations": "Rezervasyon",
+        "nav.openMenu": "Menüyü aç",
+        "nav.closeMenu": "Menüyü kapat",
+        "home.discover": "Deneyimi keşfedin",
+        "home.menu": "MENÜ",
+        "home.hookah": "NARGİLE",
+        "home.reservation": "REZERVASYON",
+        "home.tagline": "Lounge · Lezzet · Atmosfer",
+        "menu.eyebrow": "Lezzeti keşfedin",
+        "menu.title": "Menümüz",
+        "menu.tagline": "Lounge · Lezzet · Atmosfer",
+        "menu.categories": "Menü kategorileri",
+        "menu.productCount": "{count} ürün",
+        "menu.view": "Görünüm",
+        "menu.grid": "Kartlar",
+        "menu.list": "Liste",
+        "menu.gridLabel": "Kart görünümü",
+        "menu.listLabel": "Liste görünümü",
+        "menu.unavailableImage": "ÜRÜN FOTOĞRAFI",
+        "menu.disclaimer": "Fiyatlara servis ücreti dahil değildir.",
+        "about.heading": "Hakkımızda",
+        "about.eyebrow": "Sıradan bir akşamdan çok daha fazlası",
+        "about.titleFirst": "Bir his için",
+        "about.titleEmphasis": "gelin.",
+        "about.titleLast": "Güzel anlar için kalın.",
+        "about.description": "777 Lounge; eşsiz lezzetleri, davetkâr atmosferi ve kendinizi özel hissettiren hizmet anlayışını bir araya getiriyor. İster dostlarınızla sohbet edin ister özel bir anı kutlayın, burada kendinize zaman ayırabileceğiniz bir yer var.",
+        "about.discover": "Lezzetlerimizi keşfedin",
+        "about.imageAlt": "777 Lounge sıcak ışıklarla aydınlatılmış şık restoran atmosferi",
+        "about.highlights": [
+            { number: "01", title: "Atmosfer", detail: "Yavaşlamak, rahatlamak ve keyifli vakit geçirmek için özel bir ortam." },
+            { number: "02", title: "Lezzetler", detail: "Özenle hazırlanan yemekler ve içecekler, her ayrıntıda kalite." },
+            { number: "03", title: "Anılar", detail: "Samimi sohbetler, sıcak hizmet ve unutulmayacak akşamlar." },
+        ],
+        "reservation.eyebrow": "Akşamınız, dilediğiniz gibi",
+        "reservation.title": "Yerinizi ayırın,",
+        "reservation.titleEmphasis": "anın tadını çıkarın.",
+        "reservation.description": "777 Lounge'da size uygun yeri seçin, rezervasyon bilgilerinizi doldurun ve talebinizi WhatsApp üzerinden bize gönderin. Sizi ağırlamayı sabırsızlıkla bekliyoruz.",
+        "reservation.areaTitle": "Bahçe veya salon",
+        "reservation.areaDescription": "Tercih ettiğiniz ortamı seçin.",
+        "reservation.timeTitle": "Size uygun bir saat",
+        "reservation.timeDescription": "Tarihi, saati ve kişi sayısını belirtin.",
+        "reservation.contactTitle": "WhatsApp ile iletişim",
+        "reservation.contactDescription": "Rezervasyon talebinizi doğrudan bize gönderin.",
+        "reservation.formTitle": "Rezervasyon formu",
+        "reservation.formDescription": "Lütfen bilgilerinizi eksiksiz doldurun.",
+        "reservation.name": "Ad soyad *",
+        "reservation.namePlaceholder": "Adınızı ve soyadınızı girin",
+        "reservation.phone": "Telefon numaranız *",
+        "reservation.date": "Rezervasyon tarihi *",
+        "reservation.time": "Saat *",
+        "reservation.timePlaceholder": "Saat seçin",
+        "reservation.guests": "Kişi sayısı *",
+        "reservation.person": "kişi",
+        "reservation.people": "kişi",
+        "reservation.twentyPlus": "20+ kişi",
+        "reservation.area": "Mekan tercihi *",
+        "reservation.garden": "Bahçe",
+        "reservation.indoor": "Salon",
+        "reservation.notes": "Özel istekleriniz",
+        "reservation.notesPlaceholder": "Masa konumu, doğum günü, özel gün veya diğer istekleriniz...",
+        "reservation.invalidDate": "Lütfen bugünden itibaren geçerli bir tarih seçin.",
+        "reservation.whatsappButton": "WhatsApp ile rezervasyon yap",
+        "reservation.whatsappTitle": "REZERVASYON TALEBİ",
+        "reservation.nameLabel": "Ad soyad",
+        "reservation.phoneLabel": "Telefon",
+        "reservation.dateLabel": "Tarih",
+        "reservation.timeLabel": "Saat",
+        "reservation.guestsLabel": "Kişi sayısı",
+        "reservation.areaLabel": "Mekan",
+        "reservation.notesLabel": "Özel istekler",
+        "reservation.notSpecified": "Belirtilmedi",
+        "reservation.whatsappMessage": "Rezervasyon uygunluğunun kontrol edilmesini rica ederim.",
+        "reservation.disclaimer": "Talebiniz WhatsApp üzerinden iletilir. Rezervasyonunuz, işletme tarafından onaylandığında kesinleşir.",
+        "reservation.visit": "Bizi ziyaret edin",
+        "reservation.mapTitle": "777 Lounge",
+        "reservation.mapEmphasis": "haritada",
+        "reservation.mapDescription": "Bizi haritada bulun ve kolayca ziyaret edin.",
+        "reservation.mapButton": "Google Maps'te aç",
+        "reservation.mapTitleAttribute": "777 Lounge haritası",
+        "reservation.mapFooter": "777 Lounge · Sizi bekliyoruz",
+    },
+    en: {
+        "seo.description": "777 Lounge — great flavors, good company and memorable moments.",
+        "nav.language": "Choose language",
+        "nav.home": "Home",
+        "nav.about": "About",
+        "nav.menu": "Menu",
+        "nav.reservations": "Reservations",
+        "nav.openMenu": "Open menu",
+        "nav.closeMenu": "Close menu",
+        "home.discover": "Discover the experience",
+        "home.menu": "MENU",
+        "home.hookah": "HOOKAH",
+        "home.reservation": "RESERVATIONS",
+        "home.tagline": "Lounge · Taste · Atmosphere",
+        "menu.eyebrow": "Discover the flavor",
+        "menu.title": "Our Menu",
+        "menu.tagline": "Lounge · Taste · Atmosphere",
+        "menu.categories": "Menu categories",
+        "menu.productCount": "{count} items",
+        "menu.view": "View",
+        "menu.grid": "Cards",
+        "menu.list": "List",
+        "menu.gridLabel": "Card view",
+        "menu.listLabel": "List view",
+        "menu.unavailableImage": "PRODUCT PHOTO",
+        "menu.disclaimer": "Prices do not include a service charge.",
+        "about.heading": "About us",
+        "about.eyebrow": "More than just another evening",
+        "about.titleFirst": "Come for",
+        "about.titleEmphasis": "the feeling.",
+        "about.titleLast": "Stay for the moments.",
+        "about.description": "777 Lounge brings together distinctive flavors, a welcoming atmosphere and thoughtful service that makes you feel special. Whether you're catching up with friends or celebrating a special occasion, it's a place to take time for yourself.",
+        "about.discover": "Explore our menu",
+        "about.imageAlt": "Elegant 777 Lounge restaurant atmosphere illuminated by warm lights",
+        "about.highlights": [
+            { number: "01", title: "Atmosphere", detail: "A special place to slow down, unwind and enjoy your time." },
+            { number: "02", title: "Flavors", detail: "Carefully prepared food and drinks, with quality in every detail." },
+            { number: "03", title: "Memories", detail: "Good conversation, warm service and evenings to remember." },
+        ],
+        "reservation.eyebrow": "Your evening, your way",
+        "reservation.title": "Reserve your table,",
+        "reservation.titleEmphasis": "enjoy the moment.",
+        "reservation.description": "Choose the space that suits you at 777 Lounge, fill in your reservation details and send your request to us on WhatsApp. We look forward to welcoming you.",
+        "reservation.areaTitle": "Garden or indoors",
+        "reservation.areaDescription": "Choose the setting you prefer.",
+        "reservation.timeTitle": "A time that suits you",
+        "reservation.timeDescription": "Choose your date, time and party size.",
+        "reservation.contactTitle": "Contact us on WhatsApp",
+        "reservation.contactDescription": "Send your reservation request directly to us.",
+        "reservation.formTitle": "Reservation form",
+        "reservation.formDescription": "Please fill in all your details.",
+        "reservation.name": "Full name *",
+        "reservation.namePlaceholder": "Enter your first and last name",
+        "reservation.phone": "Phone number *",
+        "reservation.date": "Reservation date *",
+        "reservation.time": "Time *",
+        "reservation.timePlaceholder": "Select a time",
+        "reservation.guests": "Party size *",
+        "reservation.person": "guest",
+        "reservation.people": "guests",
+        "reservation.twentyPlus": "20+ guests",
+        "reservation.area": "Seating preference *",
+        "reservation.garden": "Garden",
+        "reservation.indoor": "Indoor",
+        "reservation.notes": "Special requests",
+        "reservation.notesPlaceholder": "Table location, birthday, special occasion or any other requests...",
+        "reservation.invalidDate": "Please select a date from today onward.",
+        "reservation.whatsappButton": "Reserve via WhatsApp",
+        "reservation.whatsappTitle": "RESERVATION REQUEST",
+        "reservation.nameLabel": "Name",
+        "reservation.phoneLabel": "Phone",
+        "reservation.dateLabel": "Date",
+        "reservation.timeLabel": "Time",
+        "reservation.guestsLabel": "Party size",
+        "reservation.areaLabel": "Seating",
+        "reservation.notesLabel": "Special requests",
+        "reservation.notSpecified": "Not specified",
+        "reservation.whatsappMessage": "Please check availability for this reservation.",
+        "reservation.disclaimer": "Your request will be sent via WhatsApp. Your reservation is confirmed once approved by the venue.",
+        "reservation.visit": "Visit us",
+        "reservation.mapTitle": "777 Lounge",
+        "reservation.mapEmphasis": "on the map",
+        "reservation.mapDescription": "Find us on the map and come by with ease.",
+        "reservation.mapButton": "Open in Google Maps",
+        "reservation.mapTitleAttribute": "777 Lounge on the map",
+        "reservation.mapFooter": "777 Lounge · We look forward to seeing you",
+    },
+};
+
+export function LanguageProvider({ children }) {
+    const [language, setLanguage] = useState(() => {
+        try {
+            return window.localStorage.getItem("777lounge-language") === "en" ? "en" : "tr";
+        } catch (error) {
+            console.error("Could not read the saved language preference.", error);
+            return "tr";
+        }
+    });
+
+    useEffect(() => {
+        document.documentElement.lang = language;
+        document.querySelector('meta[name="description"]')?.setAttribute("content", translations[language]["seo.description"]);
+        try {
+            window.localStorage.setItem("777lounge-language", language);
+        } catch (error) {
+            console.error("Could not save the language preference.", error);
+        }
+    }, [language]);
+
+    const value = useMemo(() => ({
+        language,
+        setLanguage,
+        t: (key, variables = {}) => {
+            const text = translations[language][key];
+            if (text === undefined) {
+                throw new Error(`Missing "${key}" translation for "${language}".`);
+            }
+            if (typeof text !== "string") return text;
+            return text.replace(/\{(\w+)\}/g, (_, name) => String(variables[name] ?? `{${name}}`));
+        },
+    }), [language]);
+
+    return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+}
