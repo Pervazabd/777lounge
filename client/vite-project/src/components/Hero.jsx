@@ -1,7 +1,7 @@
-
 import React, { useState } from "react";
 import Navbar from "../layout/clinet/navbar.jsx";
 import { useLanguage } from "../useLanguage.js";
+import AppLink from "../AppLink.jsx";
 
 const menuItems = [
     {
@@ -12,9 +12,9 @@ const menuItems = [
     },
     {
         id: "hookah",
-        href: "/#hookah",
+        href: "/hookah#hookah-menu",
         image:
-            "https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1920&auto=format&fit=crop",
+            "https://scontent.fyei1-1.fna.fbcdn.net/v/t1.6435-9/90720666_116337913328023_9020232255691292672_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1365&ctp=s2048x1365&_nc_cat=100&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=127cfc&_nc_ohc=0ASSjWD90GoQ7kNvwHBwJMi&_nc_oc=Adqpsi4MfoNV8mX9MrcM19a0lDCVvM_WZZEr7u_ZYldHNitF2m270629PT6QeMUVIOo&_nc_zt=23&_nc_ht=scontent.fyei1-1.fna&_nc_gid=BT84gzOJFWoahsCz7y3hFQ&_nc_ss=7b2a8&oh=00_AQOOsBYfUTlQxDzjkiEjEOAd5cLdPBULg8XAbuN5zqTJNA&oe=6AFC6B85",
     },
     {
         id: "rezervasyon",
@@ -41,8 +41,8 @@ export default function Hero() {
                 <div
                     key={item.id}
                     className={`absolute inset-0 -z-20 bg-cover bg-center transition-all duration-1000 ease-in-out ${activeItem === item.id
-                            ? "scale-105 opacity-100"
-                            : "scale-100 opacity-0"
+                        ? "scale-105 opacity-100"
+                        : "scale-100 opacity-0"
                         }`}
                     style={{
                         backgroundImage: `url("${item.image}")`,
@@ -74,7 +74,7 @@ export default function Hero() {
                         const hasHoveredItem = hoveredItem !== null;
 
                         return (
-                            <a
+                            <AppLink
                                 key={item.id}
                                 href={item.href}
                                 onMouseEnter={() => {
@@ -87,14 +87,14 @@ export default function Hero() {
                                 }}
                                 onClick={() => setActiveItem(item.id)}
                                 className={`group relative py-2 transition-all duration-500 ease-in-out ${hasHoveredItem && hoveredItem !== item.id
-                                        ? "md:scale-95 md:blur-[3px] md:opacity-35"
-                                        : "scale-100 blur-0 opacity-100"
+                                    ? "md:scale-95 md:blur-[3px] md:opacity-35"
+                                    : "scale-100 blur-0 opacity-100"
                                     }`}
                             >
                                 <span
                                     className={`block whitespace-nowrap text-4xl font-light tracking-[0.06em] transition-all duration-500 sm:text-5xl md:text-3xl lg:text-5xl xl:text-6xl ${isActive
-                                            ? "text-white"
-                                            : "text-white/75 group-hover:text-white"
+                                        ? "text-white"
+                                        : "text-white/75 group-hover:text-white"
                                         }`}
                                 >
                                     {t(`home.${item.id === "rezervasyon" ? "reservation" : item.id}`)}
@@ -105,7 +105,7 @@ export default function Hero() {
                                     className={`absolute bottom-0 left-0 h-px bg-[#d8c4a0] transition-all duration-500 ${isActive ? "w-full" : "w-0"
                                         }`}
                                 />
-                            </a>
+                            </AppLink>
                         );
                     })}
                 </div>

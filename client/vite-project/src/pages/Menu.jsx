@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../useLanguage.js";
 import { getMenuItems } from "../services/menu.js";
 
+const HOOKAH_CATEGORY_ID = "nargile";
 const formatPrice = (price) => `${price} TL`;
 
 function ProductImage({ item, compact = false }) {
@@ -106,13 +107,24 @@ function ProductListItem({ item }) {
     );
 }
 
-export default function Menu() {
+export default function Menu({ categoryId = null }) {
     const { t } = useLanguage();
     const [categories, setCategories] = useState([]);
     const [activeId, setActiveId] = useState("");
     const [view, setView] = useState("grid");
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState(false);
+    const categoryScrollRef = useRef(null);
+
+    const scrollCategories = (direction) => {
+        const container = categoryScrollRef.current;
+        if (!container) return;
+
+        // Her klikdə təxminən bir tab eni qədər sürüşdür.
+        const firstTab = container.querySelector("button[data-category-tab]");
+        const step = firstTab ? firstTab.getBoundingClientRect().width + 12 : 150;
+        container.scrollBy({ left: direction * step, behavior: "smooth" });
+    };
 
     useEffect(() => {
         const controller = new AbortController();
@@ -151,12 +163,16 @@ export default function Menu() {
                         items: category.items.sort((a, b) => a.itemOrder - b.itemOrder),
                     }));
 
-                setCategories(loadedCategories);
+                const visibleCategories = categoryId
+                    ? loadedCategories.filter((category) => category.id === categoryId)
+                    : loadedCategories.filter((category) => category.id !== HOOKAH_CATEGORY_ID);
+
+                setCategories(visibleCategories);
                 const hashId = window.location.hash.slice(1);
                 setActiveId(
-                    loadedCategories.some((category) => category.id === hashId)
+                    visibleCategories.some((category) => category.id === hashId)
                         ? hashId
-                        : loadedCategories[0]?.id ?? "",
+                        : visibleCategories[0]?.id ?? "",
                 );
             })
             .catch((error) => {
@@ -170,7 +186,7 @@ export default function Menu() {
             });
 
         return () => controller.abort();
-    }, []);
+    }, [categoryId]);
 
     const active = categories.find((category) => category.id === activeId);
 
@@ -188,11 +204,11 @@ export default function Menu() {
         syncCategoryWithHash();
         window.addEventListener("hashchange", syncCategoryWithHash);
         return () => window.removeEventListener("hashchange", syncCategoryWithHash);
-    }, [categories]);
+    }, [categories, categoryId]);
 
     return (
         <section
-            id="menu"
+            id={categoryId === HOOKAH_CATEGORY_ID ? "hookah-menu" : "menu"}
             className="relative min-h-screen overflow-hidden bg-[#0a0a0a] pb-20 pt-28 text-white sm:pt-36 sm:pb-24"
         >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-96 bg-[radial-gradient(ellipse_at_top,rgba(201,162,77,0.12),transparent_70%)]" />
@@ -218,16 +234,16 @@ export default function Menu() {
             <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <header className="text-center">
                     <p className="text-[10px] font-medium uppercase tracking-[0.35em] text-[#c9a24d] sm:text-xs sm:tracking-[0.5em]">
-                        {t("menu.eyebrow")}
+                        {t(categoryId === HOOKAH_CATEGORY_ID ? "hookah.eyebrow" : "menu.eyebrow")}
                     </p>
 
                     <h1 className="mt-4 text-4xl font-extralight uppercase tracking-[0.14em] sm:text-6xl md:text-7xl">
-                        {t("menu.title")}
+                        {t(categoryId === HOOKAH_CATEGORY_ID ? "hookah.title" : "menu.title")}
                     </h1>
 
                     <div className="mt-5 flex items-center justify-center gap-3 text-[9px] uppercase tracking-[0.2em] text-white/45 sm:gap-4 sm:text-[10px] sm:tracking-[0.3em]">
                         <span className="h-px w-7 bg-white/25 sm:w-10" />
-                        {t("menu.tagline")}
+                        {t(categoryId === HOOKAH_CATEGORY_ID ? "hookah.tagline" : "menu.tagline")}
                         <span className="h-px w-7 bg-white/25 sm:w-10" />
                     </div>
                 </header>
@@ -242,37 +258,78 @@ export default function Menu() {
                     </p>
                 ) : active ? (
                     <>
-                        <nav
-                            aria-label={t("menu.categories")}
-                            className="no-scrollbar -mx-4 mt-10 overflow-x-auto px-4 sm:mx-0 sm:mt-14 sm:px-0"
-                        >
-                            <ul className="flex min-w-max items-center gap-2 border-b border-white/10 sm:mx-auto sm:w-fit sm:gap-3">
-                                {categories.map((category) => {
-                                    const isActive = category.id === activeId;
+                        {categories.length > 1 && (
+                            <nav
+                                aria-label={t("menu.categories")}
+                                className="mt-10 flex min-w-0 items-center gap-2 sm:mt-14 sm:gap-3"
+                            >
+                                <button
+                                    type="button"
+                                    onClick={() => scrollCategories(-1)}
+                                    aria-label="Əvvəlki kateqoriyalar"
+                                    title="Əvvəlki kateqoriyalar"
+                                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/75 transition hover:border-[#c9a24d]/60 hover:bg-[#c9a24d]/10 hover:text-[#c9a24d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a24d]"
+                                >
+                                    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
+                                        <path d="m15 18-6-6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </button>
 
-                                    return (
-                                        <li key={category.id}>
-                                            <button
-                                                type="button"
-                                                onClick={() => setActiveId(category.id)}
-                                                aria-pressed={isActive}
-                                                className={`relative rounded-t-lg px-4 py-3 text-xs font-medium transition-colors sm:px-5 sm:py-4 sm:text-sm ${isActive
-                                                    ? "bg-[#c9a24d]/[0.08] text-[#c9a24d]"
-                                                    : "text-white/55 hover:text-white"
-                                                    }`}
-                                            >
-                                                {category.label}
+                                <div
+                                    ref={categoryScrollRef}
+                                    className="no-scrollbar min-w-0 flex-1 overflow-x-auto scroll-smooth"
+                                >
+                                    <ul className="flex w-max min-w-full items-center gap-2 border-b border-white/10 sm:gap-3">
+                                        {categories.map((category) => {
+                                            const isActive = category.id === activeId;
 
-                                                <span
-                                                    className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-[#c9a24d] transition-opacity ${isActive ? "opacity-100" : "opacity-0"
-                                                        }`}
-                                                />
-                                            </button>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        </nav>
+                                            return (
+                                                <li key={category.id} className="shrink-0">
+                                                    <button
+                                                        type="button"
+                                                        data-category-tab
+                                                        onClick={() => {
+                                                            setActiveId(category.id);
+                                                            const container = categoryScrollRef.current;
+                                                            const button = container?.querySelector(`[data-category-id="${category.id}"]`);
+                                                            if (container && button) {
+                                                                const left = button.getBoundingClientRect().left - container.getBoundingClientRect().left + container.scrollLeft;
+                                                                container.scrollTo({ left, behavior: "smooth" });
+                                                            }
+                                                        }}
+                                                        data-category-id={category.id}
+                                                        aria-pressed={isActive}
+                                                        className={`relative whitespace-nowrap rounded-t-lg px-4 py-3 text-xs font-medium transition-colors sm:px-5 sm:py-4 sm:text-sm ${isActive
+                                                            ? "bg-[#c9a24d]/[0.08] text-[#c9a24d]"
+                                                            : "text-white/55 hover:text-white"
+                                                            }`}
+                                                    >
+                                                        {category.label}
+
+                                                        <span
+                                                            className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-[#c9a24d] transition-opacity ${isActive ? "opacity-100" : "opacity-0"
+                                                                }`}
+                                                        />
+                                                    </button>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => scrollCategories(1)}
+                                    aria-label="Növbəti kateqoriyalar"
+                                    title="Növbəti kateqoriyalar"
+                                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-white/75 transition hover:border-[#c9a24d]/60 hover:bg-[#c9a24d]/10 hover:text-[#c9a24d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a24d]"
+                                >
+                                    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" aria-hidden="true">
+                                        <path d="m9 18 6-6-6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </button>
+                            </nav>
+                        )}
 
                         <div
                             id={active.id === "hookah" ? "hookah" : undefined}

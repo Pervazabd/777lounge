@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../layout/clinet/navbar.jsx";
 import { useLanguage } from "../useLanguage.js";
+import AppLink from "../AppLink.jsx";
 
 export default function About() {
     const { t } = useLanguage();
@@ -138,7 +139,7 @@ export default function About() {
                                 {t("about.description")}
                             </p>
 
-                            <a
+                            <AppLink
                                 href="/#menu"
                                 className="group mt-9 inline-flex items-center gap-4 border-b border-[#d8c4a0]/50 pb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-[#e8d7bd] transition-colors hover:border-[#d8c4a0] hover:text-white"
                             >
@@ -150,7 +151,7 @@ export default function About() {
                                 >
                                     →
                                 </span>
-                            </a>
+                            </AppLink>
                         </div>
 
                         {/* Sağ taraf: Görsel */}

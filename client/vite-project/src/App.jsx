@@ -2,19 +2,38 @@ import './App.css'
 import Home from './pages/Home.jsx'
 import About from './pages/About.jsx'
 import Reservation from './pages/Rezerv.jsx'
+import Hookah from './pages/Hookah.jsx'
+import Admin from './pages/Admin.jsx'
 import { LanguageProvider } from './i18n.jsx'
+import { NavigationProvider } from './navigation.jsx'
+import { useNavigation } from './useNavigation.js'
 
-function App() {
-  const path = window.location.pathname.replace(/\/+$/, '') || '/'
+function AppContent() {
+  const { location } = useNavigation()
+  const path = location.pathname
 
   let page = <Home />
-  if (path === '/about') {
+  if (path === '/admin') {
+    page = <Admin />
+  } else if (path === '/about') {
     page = <About />
   } else if (path === '/rezerv') {
     page = <Reservation />
+  } else if (path === '/hookah') {
+    page = <Hookah />
   }
 
-  return <LanguageProvider>{page}</LanguageProvider>
+  return page
+}
+
+function App() {
+  return (
+    <NavigationProvider>
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
+    </NavigationProvider>
+  )
 }
 
 export default App

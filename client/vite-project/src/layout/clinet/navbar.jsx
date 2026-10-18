@@ -1,6 +1,7 @@
 import { useState } from "react";
 import loungeLogo from "../../assets/Krom 777 Lounge Logo ve Tüy.png";
 import { useLanguage } from "../../useLanguage.js";
+import AppLink from "../../AppLink.jsx";
 
 const navLinks = [
     { key: "home", href: "/" },
@@ -34,18 +35,18 @@ export default function Navbar() {
             <nav className="mx-auto flex max-w-[1800px] items-center justify-between px-5 py-5 sm:px-8 lg:px-14 lg:py-7">
 
                 {/* Logo */}
-                <a href="/" className="group shrink-0" aria-label="777 Lounge">
+                <AppLink href="/" className="group shrink-0" aria-label="777 Lounge">
                     <img
                         src={loungeLogo}
                         alt="777 Lounge"
                         className="h-10 w-auto transition-opacity duration-300 group-hover:opacity-80 sm:h-12 lg:h-14"
                     />
-                </a>
+                </AppLink>
 
                 {/* Desktop Navigation */}
                 <div className="hidden items-center gap-7 lg:flex xl:gap-9">
                     {navLinks.map((link, index) => (
-                        <a
+                        <AppLink
                             key={link.key}
                             href={link.href}
                             className={`group relative py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 hover:text-amber-200 xl:text-xs ${index === 0 ? "text-amber-200" : "text-white/90"
@@ -56,7 +57,7 @@ export default function Navbar() {
                                 className={`absolute -bottom-0.5 left-0 h-px w-0 bg-amber-200 transition-all duration-300 group-hover:w-full ${index === 0 ? "w-full" : ""
                                     }`}
                             />
-                        </a>
+                        </AppLink>
                     ))}
                     {languagePicker}
                 </div>
@@ -90,7 +91,7 @@ export default function Navbar() {
             >
                 <div className="p-5">
                     {navLinks.map((link, index) => (
-                        <a
+                        <AppLink
                             key={link.key}
                             href={link.href}
                             onClick={() => setMenuOpen(false)}
@@ -100,7 +101,7 @@ export default function Navbar() {
                             <span className="text-amber-200">
                                 {String(index + 1).padStart(2, "0")}
                             </span>
-                        </a>
+                        </AppLink>
                     ))}
                     <div className="flex justify-end pt-5">
                         {languagePicker}
