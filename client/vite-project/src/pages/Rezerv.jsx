@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Navbar from "../layout/clinet/navbar.jsx";
 import { useLanguage } from "../useLanguage.js";
+import { submitReservation } from "../services/reservations.js";
 
 const WHATSAPP_NUMBER = "905541360918";
 const LOUNGE_MAP_LINK = "https://share.google/jPCFjM8YGCXbSanEO";
@@ -58,6 +59,7 @@ export default function Reservation() {
     });
 
     const [error, setError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [minDate] = useState(() => {
         const today = new Date();
@@ -73,13 +75,16 @@ export default function Reservation() {
         setError("");
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         if (form.date < minDate) {
             setError(t("reservation.invalidDate"));
             return;
         }
+
+        setError("");
+        setIsSubmitting(true);
 
         const message = [
             `✨ *777 LOUNGE — ${t("reservation.whatsappTitle")}*`,
@@ -99,7 +104,24 @@ export default function Reservation() {
         const whatsappUrl =
             `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 
-        window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+        const whatsappWindow = window.open("", "_blank");
+
+        try {
+            await submitReservation(form);
+
+            if (whatsappWindow) {
+                whatsappWindow.opener = null;
+                whatsappWindow.location.href = whatsappUrl;
+            } else {
+                window.location.assign(whatsappUrl);
+            }
+        } catch (submitError) {
+            whatsappWindow?.close();
+            console.error("Could not submit reservation.", submitError);
+            setError(t("reservation.submitError"));
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const inputClass =
@@ -400,6 +422,7 @@ export default function Reservation() {
 
                     <motion.button
                         type="submit"
+                        disabled={isSubmitting}
                         whileHover={shouldReduceMotion ? undefined : {
                             scale: 1.015,
                             boxShadow: "0 0 28px rgba(216,196,160,0.18)",
@@ -408,7 +431,7 @@ export default function Reservation() {
                             scale: 0.985,
                         }}
                         transition={{ duration: 0.2 }}
-                        className="mt-7 flex w-full items-center justify-center gap-3 rounded-xl bg-[#d8c4a0] px-5 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#11110f] transition duration-300 hover:bg-[#ead9b9] focus:outline-none focus:ring-2 focus:ring-[#d8c4a0] focus:ring-offset-2 focus:ring-offset-[#0e0f0d]"
+                        className="mt-7 flex w-full items-center justify-center gap-3 rounded-xl bg-[#d8c4a0] px-5 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#11110f] transition duration-300 hover:bg-[#ead9b9] focus:outline-none focus:ring-2 focus:ring-[#d8c4a0] focus:ring-offset-2 focus:ring-offset-[#0e0f0d] disabled:cursor-wait disabled:opacity-60"
                     >
                         <svg
                             viewBox="0 0 24 24"
@@ -418,7 +441,7 @@ export default function Reservation() {
                         >
                             <path d="M20.52 3.48A11.82 11.82 0 0 0 12.08 0C5.5 0 .15 5.34.15 11.91c0 2.1.55 4.15 1.59 5.96L0 24l6.3-1.65a11.93 11.93 0 0 0 5.77 1.47h.01c6.57 0 11.92-5.35 11.92-11.92 0-3.18-1.24-6.17-3.48-8.42ZM12.08 21.8a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.74.98 1-3.65-.23-.37a9.83 9.83 0 0 1-1.51-5.26c0-5.46 4.45-9.9 9.9-9.9a9.83 9.83 0 0 1 7 2.9 9.83 9.83 0 0 1 2.9 7c0 5.45-4.45 9.89-9.92 9.89Zm5.43-7.41c-.3-.15-1.76-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.48-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.17.2 2.1 3.2 5.08 4.49.71.31 1.26.5 1.69.64.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.08-.12-.27-.2-.57-.35Z" />
                         </svg>
-                        {t("reservation.whatsappButton")}
+                        {isSubmitting ? t("reservation.submitting") : t("reservation.whatsappButton")}
                     </motion.button>
 
                     <p className="mt-4 text-center text-[10px] leading-5 text-white/35">

@@ -1,8 +1,0 @@
-{
-  "scripts": {
-    "dev": "npm --prefix client/vite-project run dev"
-  },
-  "dependencies": {
-    "framer-motion": "^14.1.0"
-  }
-}
