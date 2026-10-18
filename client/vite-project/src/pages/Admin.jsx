@@ -149,7 +149,7 @@ export default function Admin() {
             setItems(updatedItems);
             setSelectedId(savedItem._id);
             setForm(toFormItem(savedItem));
-            setNotice("Məhsul məlumatları yadda saxlanıldı.");
+            setNotice("Ürün bilgileri kaydedildi.");
         } catch (saveError) {
             setError(saveError.message);
         } finally {
@@ -158,7 +158,7 @@ export default function Admin() {
     };
 
     const deleteItem = async () => {
-        if (!selectedId || !window.confirm("Bu məhsulu silmək istədiyinizə əminsiniz?")) return;
+        if (!selectedId || !window.confirm("Bu ürünü silmek istediğinizden emin misiniz?")) return;
 
         setSaving(true);
         setError("");
@@ -167,7 +167,7 @@ export default function Admin() {
             await removeMenuItem(adminKey, selectedId);
             setItems((current) => current.filter((item) => item._id !== selectedId));
             startNewItem();
-            setNotice("Məhsul silindi.");
+            setNotice("Ürün silindi.");
         } catch (deleteError) {
             setError(deleteError.message);
         } finally {
@@ -185,14 +185,14 @@ export default function Admin() {
 
     if (!authenticated) {
         return (
-            <main className="flex min-h-screen items-center justify-center bg-[#090a09] px-4 text-white">
+            <main lang="tr" className="flex min-h-screen items-center justify-center bg-[#090a09] px-4 text-white">
                 <form onSubmit={submitKey} className="w-full max-w-md rounded-3xl border border-white/10 bg-[#111] p-7 sm:p-9">
                     <p className="text-[10px] uppercase tracking-[0.35em] text-[#c9a24d]">777 Lounge</p>
-                    <h1 className="mt-3 text-3xl font-light">Admin paneli</h1>
+                    <h1 className="mt-3 text-3xl font-light">Yönetim paneli</h1>
                     <p className="mt-3 text-sm leading-6 text-white/50">
-                        Davam etmək üçün serverdə təyin edilmiş admin açarını daxil edin.
+                        Devam etmek için sunucuda tanımlı yönetici anahtarını girin.
                     </p>
-                    <Field label="Admin açarı" className="mt-7">
+                    <Field label="Yönetici anahtarı" className="mt-7">
                         <input
                             autoComplete="current-password"
                             className={inputClassName}
@@ -208,7 +208,7 @@ export default function Admin() {
                         disabled={loading}
                         type="submit"
                     >
-                        {loading ? "Yoxlanılır..." : "Daxil ol"}
+                        {loading ? "Kontrol ediliyor..." : "Giriş yap"}
                     </button>
                 </form>
             </main>
@@ -216,16 +216,16 @@ export default function Admin() {
     }
 
     return (
-        <main className="min-h-screen bg-[#090a09] px-4 py-6 text-white sm:px-6 lg:px-10">
+        <main lang="tr" className="min-h-screen bg-[#090a09] px-4 py-6 text-white sm:px-6 lg:px-10">
             <div className="mx-auto max-w-[1500px]">
                 <header className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
                     <div>
                         <p className="text-[10px] uppercase tracking-[0.35em] text-[#c9a24d]">777 Lounge</p>
-                        <h1 className="mt-2 text-3xl font-light sm:text-4xl">Məhsulların idarəsi</h1>
-                        <p className="mt-2 text-sm text-white/45">{items.length} məhsul</p>
+                        <h1 className="mt-2 text-3xl font-light sm:text-4xl">Ürün yönetimi</h1>
+                        <p className="mt-2 text-sm text-white/45">{items.length} ürün</p>
                     </div>
                     <button className="rounded-xl border border-white/15 px-4 py-2 text-sm text-white/70 hover:border-white/35 hover:text-white" onClick={signOut} type="button">
-                        Çıxış
+                        Çıkış yap
                     </button>
                 </header>
 
@@ -235,13 +235,13 @@ export default function Admin() {
                 <div className="mt-6 grid gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
                     <aside className="h-fit rounded-2xl border border-white/10 bg-[#111] p-4">
                         <button className="w-full rounded-xl bg-[#c9a24d] px-4 py-3 text-sm font-semibold text-black hover:bg-[#d8b665]" onClick={startNewItem} type="button">
-                            + Yeni məhsul
+                            + Yeni ürün
                         </button>
                         <input
-                            aria-label="Məhsul axtar"
+                            aria-label="Ürün ara"
                             className={`${inputClassName} mt-4`}
                             onChange={(event) => setSearch(event.target.value)}
-                            placeholder="Məhsul və kateqoriya axtar..."
+                            placeholder="Ürün veya kategori ara..."
                             type="search"
                             value={search}
                         />
@@ -264,63 +264,63 @@ export default function Admin() {
                     <form onSubmit={saveItem} className="rounded-2xl border border-white/10 bg-[#111] p-5 sm:p-7">
                         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5">
                             <div>
-                                <h2 className="text-xl font-medium">{selectedId ? "Məhsulu redaktə et" : "Yeni məhsul"}</h2>
-                                <p className="mt-1 text-xs text-white/40">Menyuya aid bütün məhsul məlumatları</p>
+                                <h2 className="text-xl font-medium">{selectedId ? "Ürünü düzenle" : "Yeni ürün"}</h2>
+                                <p className="mt-1 text-xs text-white/40">Menüdeki tüm ürün bilgileri</p>
                             </div>
                             {selectedId && (
                                 <button className="rounded-lg border border-red-400/30 px-3 py-2 text-xs text-red-200 hover:bg-red-400/10" disabled={saving} onClick={deleteItem} type="button">
-                                    Məhsulu sil
+                                    Ürünü sil
                                 </button>
                             )}
                         </div>
 
                         <div className="mt-6 grid gap-5 sm:grid-cols-2">
-                            <Field label="Məhsul adı">
+                            <Field label="Ürün adı">
                                 <input className={inputClassName} onChange={(event) => updateField("name", event.target.value)} required value={form.name} />
                             </Field>
-                            <Field label="Qiymət (TRY)">
+                            <Field label="Fiyat (TRY)">
                                 <input className={inputClassName} min="0" onChange={(event) => updateField("price", event.target.value)} required type="number" value={form.price} />
                             </Field>
-                            <Field label="Kateqoriya adı">
+                            <Field label="Kategori adı">
                                 <input className={inputClassName} onChange={(event) => updateField("categoryName", event.target.value)} required value={form.categoryName} />
                             </Field>
-                            <Field label="Kateqoriya kodu (slug)">
+                            <Field label="Kategori kodu (slug)">
                                 <input className={inputClassName} onChange={(event) => updateField("category", event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))} pattern="[a-z0-9-]+" required value={form.category} />
                             </Field>
-                            <Field label="Kateqoriya sırası">
+                            <Field label="Kategori sırası">
                                 <input className={inputClassName} min="1" onChange={(event) => updateField("categoryOrder", event.target.value)} required type="number" value={form.categoryOrder} />
                             </Field>
-                            <Field label="Məhsul sırası">
+                            <Field label="Ürün sırası">
                                 <input className={inputClassName} min="1" onChange={(event) => updateField("itemOrder", event.target.value)} required type="number" value={form.itemOrder} />
                             </Field>
-                            <Field className="sm:col-span-2" label="Təsvir">
+                            <Field className="sm:col-span-2" label="Açıklama">
                                 <textarea className={`${inputClassName} min-h-24 resize-y`} onChange={(event) => updateField("description", event.target.value)} required value={form.description} />
                             </Field>
-                            <Field className="sm:col-span-2" label="Tərkib / etiketlər (hər sətrə bir dənə)">
+                            <Field className="sm:col-span-2" label="İçerik / etiketler (her satıra bir tane)">
                                 <textarea className={`${inputClassName} min-h-24 resize-y`} onChange={(event) => updateField("ingredients", event.target.value)} value={form.ingredients} />
                             </Field>
-                            <Field className="sm:col-span-2" label="Şəkil URL-i (HTTP/HTTPS)">
+                            <Field className="sm:col-span-2" label="Görsel URL'si (HTTP/HTTPS)">
                                 <input className={inputClassName} onChange={(event) => updateImage("url", event.target.value)} required type="url" value={form.image.url} />
                             </Field>
-                            <Field label="Şəkil üçün alt mətn">
+                            <Field label="Görsel alternatif metni">
                                 <input className={inputClassName} onChange={(event) => updateImage("alt", event.target.value)} required value={form.image.alt} />
                             </Field>
-                            <Field label="Şəkil mənbəyi">
+                            <Field label="Görsel kaynağı">
                                 <input className={inputClassName} onChange={(event) => updateImage("source", event.target.value)} required value={form.image.source} />
                             </Field>
-                            <Field label="Valyuta">
+                            <Field label="Para birimi">
                                 <select className={inputClassName} onChange={(event) => updateField("currency", event.target.value)} value={form.currency}>
                                     <option className="bg-[#111]" value="TRY">TRY</option>
                                 </select>
                             </Field>
                             <label className="flex items-center gap-3 self-end rounded-xl border border-white/10 px-4 py-3 text-sm text-white/70">
                                 <input checked={form.isActive} onChange={(event) => updateField("isActive", event.target.checked)} type="checkbox" />
-                                Saytda aktiv göstər
+                                Sitede yayınla
                             </label>
                         </div>
 
                         <button className="mt-7 rounded-xl bg-[#c9a24d] px-6 py-3 text-sm font-semibold text-black transition hover:bg-[#d8b665] disabled:opacity-50" disabled={saving} type="submit">
-                            {saving ? "Yadda saxlanılır..." : "Dəyişiklikləri yadda saxla"}
+                            {saving ? "Kaydediliyor..." : "Değişiklikleri kaydet"}
                         </button>
                     </form>
                 </div>

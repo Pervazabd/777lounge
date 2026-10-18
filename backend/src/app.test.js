@@ -50,3 +50,24 @@ test("product endpoint rejects non-scalar category filters", async () => {
   assert.equal(response.status, 400);
   assert.equal(result.success, false);
 });
+
+test("admin product endpoint rejects an invalid admin key", async () => {
+  const originalAdminKey = process.env.ADMIN_API_KEY;
+  process.env.ADMIN_API_KEY = "test-admin-key";
+
+  try {
+    const response = await fetch(`${await apiUrl}/products/admin`, {
+      headers: { "X-Admin-Key": "incorrect-key" },
+    });
+    const result = await response.json();
+
+    assert.equal(response.status, 401);
+    assert.equal(result.success, false);
+  } finally {
+    if (originalAdminKey === undefined) {
+      delete process.env.ADMIN_API_KEY;
+    } else {
+      process.env.ADMIN_API_KEY = originalAdminKey;
+    }
+  }
+});

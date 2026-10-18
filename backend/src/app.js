@@ -29,7 +29,7 @@ app.use("/api", rateLimit({
   handler(_request, response) {
     response.status(429).json({
       success: false,
-      message: "Too many requests. Please try again later.",
+      message: "Çok fazla istek gönderildi. Lütfen daha sonra tekrar deneyin.",
     });
   },
 }));

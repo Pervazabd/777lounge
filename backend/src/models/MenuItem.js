@@ -55,7 +55,7 @@ const menuItemSchema = new mongoose.Schema(
         type: String,
         required: true,
         trim: true,
-        match: /^https:\/\/images\.unsplash\.com\/photo-/,
+        match: /^https?:\/\/\S+$/,
       },
       alt: {
         type: String,
@@ -65,7 +65,7 @@ const menuItemSchema = new mongoose.Schema(
       source: {
         type: String,
         required: true,
-        enum: ["Unsplash"],
+        trim: true,
       },
     },
     isActive: {

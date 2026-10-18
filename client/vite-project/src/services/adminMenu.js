@@ -1,18 +1,28 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || "";
 
 async function adminRequest(path, adminKey, options = {}) {
-    const response = await fetch(`${API_BASE_URL}/api/products/admin${path}`, {
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            "X-Admin-Key": adminKey,
-            ...options.headers,
-        },
-    });
-    const result = await response.json();
+    let response;
+    try {
+        response = await fetch(`${API_BASE_URL}/api/products/admin${path}`, {
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                "X-Admin-Key": adminKey,
+                ...options.headers,
+            },
+        });
+    } catch {
+        throw new Error("Sunucuya bağlanılamadı. Lütfen bağlantınızı kontrol edip tekrar deneyin.");
+    }
 
+    let result;
+    try {
+        result = await response.json();
+    } catch {
+        throw new Error("Sunucudan geçersiz bir yanıt alındı.");
+    }
     if (!response.ok || !result.success) {
-        throw new Error(result.message || "Admin request failed.");
+        throw new Error(result.message || "Yönetim isteği başarısız oldu.");
     }
 
     return result.data;
