@@ -221,13 +221,22 @@ export default function Menu({ categoryId = null }) {
         .menu-fade-up {
           animation: menuFadeUp .35s ease both;
         }
+        @keyframes hookahComingSoon {
+          from { opacity: 0; transform: translateY(18px) scale(.96); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .hookah-coming-soon {
+          animation: hookahComingSoon 900ms cubic-bezier(.22, 1, .36, 1) both;
+          text-shadow: 0 0 24px rgba(201, 162, 77, .32);
+        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
         }
         @media (prefers-reduced-motion: reduce) {
-          .menu-fade-up { animation: none; }
+          .menu-fade-up,
+          .hookah-coming-soon { animation: none; }
         }
       `}</style>
 
@@ -414,9 +423,20 @@ export default function Menu({ categoryId = null }) {
                         </div>
                     </>
                 ) : (
-                    <p role="status" className="mt-12 text-center text-sm text-white/50">
-                        {t("menu.empty")}
-                    </p>
+                    categoryId === HOOKAH_CATEGORY_ID ? (
+                        <div className="flex min-h-56 items-center justify-center py-12 text-center sm:min-h-72">
+                            <p
+                                role="status"
+                                className="hookah-coming-soon font-serif text-5xl font-light tracking-wide text-[#e8d6b5] sm:text-7xl lg:text-8xl"
+                            >
+                                {t("hookah.comingSoon")}
+                            </p>
+                        </div>
+                    ) : (
+                        <p role="status" className="mt-12 text-center text-sm text-white/50">
+                            {t("menu.empty")}
+                        </p>
+                    )
                 )}
 
                 <footer className="mt-14 border-t border-white/[0.08] pt-6 text-center sm:mt-20">

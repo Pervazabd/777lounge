@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../layout/clinet/navbar.jsx";
 import { useLanguage } from "../useLanguage.js";
 import AppLink from "../AppLink.jsx";
+import reservationImage from "../assets/EKO06195.png";
 
 const menuItems = [
     {
@@ -19,8 +20,7 @@ const menuItems = [
     {
         id: "rezervasyon",
         href: "/rezerv",
-        image:
-            "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1920&auto=format&fit=crop",
+        image: reservationImage,
     },
 ];
 

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Navbar from "../layout/clinet/navbar.jsx";
+import reservationImage from "../assets/EKO06195.png";
 import { useLanguage } from "../useLanguage.js";
 import { submitReservation } from "../services/reservations.js";
 
@@ -87,16 +88,16 @@ export default function Reservation() {
         setIsSubmitting(true);
 
         const message = [
-            `✨ *777 LOUNGE — ${t("reservation.whatsappTitle")}*`,
+            `*777 LOUNGE — ${t("reservation.whatsappTitle")}*`,
             "",
-            `👤 *${t("reservation.nameLabel")}:* ${form.name.trim()}`,
-            `📞 *${t("reservation.phoneLabel")}:* ${form.phone.trim()}`,
-            `📅 *${t("reservation.dateLabel")}:* ${form.date}`,
-            `🕒 *${t("reservation.timeLabel")}:* ${form.time}`,
-            `👥 *${t("reservation.guestsLabel")}:* ${form.guests}`,
-            `📍 *${t("reservation.areaLabel")}:* ${t(form.area === "garden" ? "reservation.garden" : "reservation.indoor")}`,
+            `*${t("reservation.nameLabel")}:* ${form.name.trim()}`,
+            `*${t("reservation.phoneLabel")}:* ${form.phone.trim()}`,
+            `*${t("reservation.dateLabel")}:* ${form.date}`,
+            `*${t("reservation.timeLabel")}:* ${form.time}`,
+            `*${t("reservation.guestsLabel")}:* ${form.guests}`,
+            `*${t("reservation.areaLabel")}:* ${t(form.area === "garden" ? "reservation.garden" : "reservation.indoor")}`,
             "",
-            `📝 *${t("reservation.notesLabel")}:* ${form.notes.trim() || t("reservation.notSpecified")}`,
+            `*${t("reservation.notesLabel")}:* ${form.notes.trim() || t("reservation.notSpecified")}`,
             "",
             t("reservation.whatsappMessage"),
         ].join("\n");
@@ -180,6 +181,15 @@ export default function Reservation() {
                     >
                         {t("reservation.description")}
                     </motion.p>
+
+                    <motion.img
+                        variants={reveal}
+                        src={reservationImage}
+                        alt="777 Lounge"
+                        loading="lazy"
+                        decoding="async"
+                        className="mt-8 aspect-[4/3] w-full rounded-2xl border border-white/10 object-cover"
+                    />
 
                     <motion.div
                         variants={stagger}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../layout/clinet/navbar.jsx";
 import { useLanguage } from "../useLanguage.js";
 import AppLink from "../AppLink.jsx";
+import aboutVideo from "../assets/131025 reels 777.mp4";
 
 export default function About() {
     const { t } = useLanguage();
@@ -162,13 +163,17 @@ export default function About() {
                         >
                             <div className="absolute -bottom-4 -left-4 right-10 top-10 border border-[#d8c4a0]/35 sm:-bottom-6 sm:-left-6 sm:right-14 sm:top-14" />
 
-                            <img
-                                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=85&w=1400&auto=format&fit=crop"
-                                alt={t("about.imageAlt")}
+                            <video
+                                aria-label={t("about.imageAlt")}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="metadata"
                                 className="relative aspect-[4/3] w-full object-cover"
-                                loading="eager"
-                                fetchPriority="high"
-                            />
+                            >
+                                <source src={aboutVideo} type="video/mp4" />
+                            </video>
 
                             {/* 777 Lounge rozeti */}
                             <div
