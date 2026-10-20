@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+import { API_BASE_URL } from "./apiBase.js";
 
 export async function getMenuItems(signal) {
     const response = await fetch(`${API_BASE_URL}/api/products`, { signal });
