@@ -26,10 +26,34 @@ test("accepts and normalizes a valid reservation", () => {
   assert.equal(result.value.notes, "Birthday");
 });
 
+test("accepts manually entered times and guest counts with every seating area", () => {
+  for (const area of ["garden", "indoor", "game-room"]) {
+    const result = validateReservation(validReservation({
+      time: "19:45",
+      guests: "35",
+      area,
+    }));
+
+    assert.equal(result.errors, undefined);
+    assert.equal(result.value.time, "19:45");
+    assert.equal(result.value.guests, "35");
+    assert.equal(result.value.area, area);
+  }
+});
+
+test("accepts the existing suggested time and 20-plus guest option", () => {
+  const result = validateReservation(validReservation({
+    time: "19:30",
+    guests: "20+",
+  }));
+
+  assert.equal(result.errors, undefined);
+});
+
 test("rejects invalid fields and unknown properties", () => {
   const result = validateReservation(validReservation({
     date: "2026-02-30",
-    time: "09:15",
+    time: "25:15",
     area: "balcony",
     admin: true,
   }));
@@ -38,6 +62,16 @@ test("rejects invalid fields and unknown properties", () => {
   assert.ok(result.errors.time);
   assert.ok(result.errors.area);
   assert.ok(result.errors.admin);
+});
+
+test("rejects malformed manually entered times and guest counts", () => {
+  const result = validateReservation(validReservation({
+    time: "24:00",
+    guests: "1000",
+  }));
+
+  assert.ok(result.errors.time);
+  assert.ok(result.errors.guests);
 });
 
 test("rejects non-object request bodies", () => {

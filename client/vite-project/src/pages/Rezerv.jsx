@@ -95,7 +95,11 @@ export default function Reservation() {
             `*${t("reservation.dateLabel")}:* ${form.date}`,
             `*${t("reservation.timeLabel")}:* ${form.time}`,
             `*${t("reservation.guestsLabel")}:* ${form.guests}`,
-            `*${t("reservation.areaLabel")}:* ${t(form.area === "garden" ? "reservation.garden" : "reservation.indoor")}`,
+            `*${t("reservation.areaLabel")}:* ${t({
+                garden: "reservation.garden",
+                indoor: "reservation.indoor",
+                "game-room": "reservation.gameRoom",
+            }[form.area])}`,
             "",
             `*${t("reservation.notesLabel")}:* ${form.notes.trim() || t("reservation.notSpecified")}`,
             "",
@@ -339,37 +343,50 @@ export default function Reservation() {
                             <label htmlFor="reservation-time" className={labelClass}>
                                 {t("reservation.time")}
                             </label>
-                            <select
+                            <input
                                 id="reservation-time"
                                 name="time"
+                                type="text"
+                                list="reservation-time-options"
+                                inputMode="numeric"
+                                autoComplete="off"
+                                placeholder={t("reservation.timePlaceholder")}
+                                pattern="(?:[01][0-9]|2[0-3]):[0-5][0-9]"
+                                title={t("reservation.timeFormatHint")}
                                 required
                                 value={form.time}
                                 onChange={(e) => updateField("time", e.target.value)}
                                 className={inputClass}
-                            >
-                                <option value="" disabled>
-                                    {t("reservation.timePlaceholder")}
-                                </option>
+                            />
+                            <datalist id="reservation-time-options">
                                 {timeOptions.map((time) => (
                                     <option key={time} value={time}>
                                         {time}
                                     </option>
                                 ))}
-                            </select>
+                            </datalist>
                         </div>
 
                         <div>
                             <label htmlFor="reservation-guests" className={labelClass}>
                                 {t("reservation.guests")}
                             </label>
-                            <select
+                            <input
                                 id="reservation-guests"
                                 name="guests"
+                                type="text"
+                                list="reservation-guest-options"
+                                inputMode="numeric"
+                                autoComplete="off"
+                                placeholder={t("reservation.guestsPlaceholder")}
+                                pattern="(?:[1-9][0-9]{0,2}|20[+])"
+                                title={t("reservation.guestsFormatHint")}
                                 required
                                 value={form.guests}
                                 onChange={(e) => updateField("guests", e.target.value)}
                                 className={inputClass}
-                            >
+                            />
+                            <datalist id="reservation-guest-options">
                                 {Array.from({ length: 20 }, (_, i) => i + 1).map(
                                     (count) => (
                                         <option key={count} value={String(count)}>
@@ -380,7 +397,7 @@ export default function Reservation() {
                                 <option value="20+">
                                     {t("reservation.twentyPlus")}
                                 </option>
-                            </select>
+                            </datalist>
                         </div>
 
                         <div>
@@ -400,6 +417,9 @@ export default function Reservation() {
                                 </option>
                                 <option value="indoor">
                                     {t("reservation.indoor")}
+                                </option>
+                                <option value="game-room">
+                                    {t("reservation.gameRoom")}
                                 </option>
                             </select>
                         </div>

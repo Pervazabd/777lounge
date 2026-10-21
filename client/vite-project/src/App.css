@@ -15,3 +15,50 @@ button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
+
+.admin-light {
+  color-scheme: light;
+  background-color: #f4f3ef;
+  color: #20201e;
+}
+
+.admin-light [class~="bg-[#090a09]"] {
+  background-color: #f4f3ef;
+}
+
+.admin-light [class~="bg-[#111]"] {
+  background-color: #fff;
+}
+
+.admin-light [class~="bg-black/15"],
+.admin-light [class~="bg-black/20"],
+.admin-light [class~="bg-black/25"] {
+  background-color: #f5f5f3;
+}
+
+.admin-light [class*="border-white/"] {
+  border-color: rgb(32 32 30 / 12%);
+}
+
+.admin-light [class*="text-white/"] {
+  color: rgb(32 32 30 / 65%);
+}
+
+.admin-light [class~="text-white"] {
+  color: #20201e;
+}
+
+.admin-light [class~="hover:text-white"]:hover {
+  color: #111;
+}
+
+.admin-light input,
+.admin-light textarea,
+.admin-light select {
+  color: #20201e;
+}
+
+.admin-light option {
+  background-color: #fff;
+  color: #20201e;
+}

@@ -45,3 +45,17 @@ export async function saveMenuItem(adminKey, item) {
 export async function removeMenuItem(adminKey, itemId) {
     await adminRequest(`/${itemId}`, adminKey, { method: "DELETE" });
 }
+
+export async function reorderMenuItems(adminKey, category, itemIds) {
+    await adminRequest("/reorder", adminKey, {
+        method: "PUT",
+        body: JSON.stringify({ category, itemIds }),
+    });
+}
+
+export async function reorderMenuCategories(adminKey, categories) {
+    await adminRequest("/reorder-categories", adminKey, {
+        method: "PUT",
+        body: JSON.stringify({ categories }),
+    });
+}

@@ -1,5 +1,32 @@
 import mongoose from "mongoose";
 
+const imageSchema = new mongoose.Schema(
+  {
+    url: {
+      type: String,
+      required: true,
+      trim: true,
+      match: /^https?:\/\/\S+$/,
+    },
+    alt: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    source: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+  },
+  { _id: false },
+);
+
+const positiveInteger = {
+  validator: Number.isInteger,
+  message: "Value must be a whole number.",
+};
+
 const menuItemSchema = new mongoose.Schema(
   {
     category: {
@@ -18,6 +45,7 @@ const menuItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
+      validate: positiveInteger,
     },
     name: {
       type: String,
@@ -28,6 +56,7 @@ const menuItemSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
+      validate: positiveInteger,
     },
     price: {
       type: Number,
@@ -47,26 +76,12 @@ const menuItemSchema = new mongoose.Schema(
       trim: true,
     },
     ingredients: {
-      type: [String],
+      type: [{ type: String, trim: true }],
       default: [],
     },
     image: {
-      url: {
-        type: String,
-        required: true,
-        trim: true,
-        match: /^https?:\/\/\S+$/,
-      },
-      alt: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      source: {
-        type: String,
-        required: true,
-        trim: true,
-      },
+      type: imageSchema,
+      required: true,
     },
     isActive: {
       type: Boolean,

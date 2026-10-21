@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import { reservationTimes } from "../utils/validateReservation.js";
-
 const reservationSchema = new mongoose.Schema(
   {
     name: {
@@ -24,17 +22,17 @@ const reservationSchema = new mongoose.Schema(
     time: {
       type: String,
       required: true,
-      enum: reservationTimes,
+      match: /^(?:[01]\d|2[0-3]):[0-5]\d$/,
     },
     guests: {
       type: String,
       required: true,
-      match: /^(?:[1-9]|1\d|20|20\+)$/,
+      match: /^(?:[1-9]\d{0,2}|20[+])$/,
     },
     area: {
       type: String,
       required: true,
-      enum: ["garden", "indoor"],
+      enum: ["garden", "indoor", "game-room"],
     },
     notes: {
       type: String,

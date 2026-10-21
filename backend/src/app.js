@@ -8,7 +8,7 @@ import { notFound } from "./middleware/notFound.js";
 
 const allowedOrigins = (
   process.env.CORS_ORIGIN ||
-  "https://777lounge.vercel.app,http://localhost:5173"
+  "https://777lounge.vercel.app"
 )
   .split(",")
   .map((origin) => origin.trim().replace(/\/$/, ""))

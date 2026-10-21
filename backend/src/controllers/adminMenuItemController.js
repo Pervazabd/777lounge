@@ -48,6 +48,89 @@ export async function createMenuItem(request, response) {
   });
 }
 
+export async function reorderMenuItems(request, response) {
+  const { category, itemIds } = request.body;
+  if (
+    typeof category !== "string"
+    || !/^[a-z0-9-]+$/.test(category)
+    || !Array.isArray(itemIds)
+    || itemIds.length === 0
+    || !itemIds.every((id) => typeof id === "string" && validObjectId(id))
+    || new Set(itemIds).size !== itemIds.length
+  ) {
+    return response.status(400).json({
+      success: false,
+      message: "Ürün sıralaması geçersiz.",
+    });
+  }
+
+  const orderedIds = itemIds.map((id) => new mongoose.Types.ObjectId(id));
+  const categoryItems = await MenuItem.find({ category }).select("_id").lean();
+  if (
+    categoryItems.length !== orderedIds.length
+    || categoryItems.some(({ _id }) => !orderedIds.some((id) => id.equals(_id)))
+  ) {
+    return response.status(400).json({
+      success: false,
+      message: "Sıralama aynı kategorideki tüm ürünleri içermelidir.",
+    });
+  }
+
+  await MenuItem.updateMany(
+    { category, _id: { $in: orderedIds } },
+    [{
+      $set: {
+        itemOrder: { $add: [{ $indexOfArray: [orderedIds, "$_id"] }, 1] },
+      },
+    }],
+  );
+
+  return response.json({
+    success: true,
+    data: {},
+  });
+}
+
+export async function reorderMenuCategories(request, response) {
+  const { categories } = request.body;
+  if (
+    !Array.isArray(categories)
+    || categories.length === 0
+    || !categories.every((category) => typeof category === "string" && /^[a-z0-9-]+$/.test(category))
+    || new Set(categories).size !== categories.length
+  ) {
+    return response.status(400).json({
+      success: false,
+      message: "Kategori sıralaması geçersiz.",
+    });
+  }
+
+  const existingCategories = await MenuItem.distinct("category");
+  if (
+    existingCategories.length !== categories.length
+    || existingCategories.some((category) => !categories.includes(category))
+  ) {
+    return response.status(400).json({
+      success: false,
+      message: "Sıralama tüm ürün kategorilerini içermelidir.",
+    });
+  }
+
+  await MenuItem.updateMany(
+    { category: { $in: categories } },
+    [{
+      $set: {
+        categoryOrder: { $add: [{ $indexOfArray: [categories, "$category"] }, 1] },
+      },
+    }],
+  );
+
+  return response.json({
+    success: true,
+    data: {},
+  });
+}
+
 export async function updateMenuItem(request, response) {
   if (!validObjectId(request.params.id)) {
     return response.status(400).json({

@@ -15,7 +15,7 @@ export const reservationTimes = [
   "21:00", "21:30", "22:00", "22:30", "23:00",
 ];
 
-const allowedTimes = new Set(reservationTimes);
+const validTimePattern = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
 
 function isCalendarDate(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
@@ -72,18 +72,18 @@ export function validateReservation(body) {
     errors.date = "Choose a valid date from today onward.";
   }
 
-  if (typeof body.time !== "string" || !allowedTimes.has(body.time)) {
-    errors.time = "Choose a valid reservation time.";
+  if (typeof body.time !== "string" || !validTimePattern.test(body.time)) {
+    errors.time = "Enter a valid reservation time in HH:MM format.";
   }
 
   if (
     typeof body.guests !== "string"
-    || !/^(?:[1-9]|1\d|20|20\+)$/.test(body.guests)
+    || !/^(?:[1-9]\d{0,2}|20[+])$/.test(body.guests)
   ) {
-    errors.guests = "Choose a valid number of guests.";
+    errors.guests = "Enter a valid number of guests.";
   }
 
-  if (!["garden", "indoor"].includes(body.area)) {
+  if (!["garden", "indoor", "game-room"].includes(body.area)) {
     errors.area = "Choose a valid seating area.";
   }
 
