@@ -7,7 +7,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   server: {
     proxy: {
-      '/api': 'http://localhost:5000',
+      '/api': 'https://seven77lounge-3.onrender.com/api/products',
     },
   },
   plugins: [
