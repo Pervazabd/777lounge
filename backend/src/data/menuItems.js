@@ -1,3 +1,5 @@
+import { menuItemDescriptions } from "./menuItemDescriptions.js";
+
 export const categories = [
   {
     slug: "manti",
@@ -351,7 +353,7 @@ export const menuItems = categories.flatMap((category, categoryIndex) =>
     itemOrder: itemIndex + 1,
     price,
     currency: "TRY",
-    description,
+    description: menuItemDescriptions[name] || description,
     ingredients,
     image: {
       url: `https://images.unsplash.com/${itemPhoto || category.photo}?auto=format&fit=crop&w=1200&q=85`,
