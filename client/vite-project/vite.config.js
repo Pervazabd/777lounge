@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://seven77lounge-8.onrender.com/',
+        target: 'https://seven77lounge-8.onrender.com',
         changeOrigin: true,
       },
     },

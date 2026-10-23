@@ -7,16 +7,19 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import { notFound } from "./middleware/notFound.js";
 
 
+
 function getAllowedOrigins() {
   return [
     "http://localhost:5173",
     "http://localhost:5174",
     "https://777lounge-jc4u.vercel.app",
+    "https://seven77lounge-8.onrender.com",
     ...(process.env.CORS_ORIGIN || "").split(","),
   ]
     .map((origin) => origin.trim().replace(/\/$/, ""))
     .filter(Boolean);
 }
+
 
 
 const app = express();
