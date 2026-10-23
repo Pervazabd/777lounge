@@ -21,6 +21,45 @@ test("health endpoint reports that MongoDB is not ready", async () => {
   assert.equal(result.data.database, "disconnected");
 });
 
+test("CORS allows the deployed Vercel frontend", async () => {
+  const origin = "https://777lounge-hozl.vercel.app";
+  const response = await fetch(`${await apiUrl}/products`, {
+    method: "OPTIONS",
+    headers: {
+      Origin: origin,
+      "Access-Control-Request-Method": "GET",
+    },
+  });
+
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get("access-control-allow-origin"), origin);
+});
+
+test("CORS reads configured origins after the app has loaded", async () => {
+  const originalCorsOrigin = process.env.CORS_ORIGIN;
+  const origin = "https://custom-frontend.example";
+  process.env.CORS_ORIGIN = origin;
+
+  try {
+    const response = await fetch(`${await apiUrl}/products`, {
+      method: "OPTIONS",
+      headers: {
+        Origin: origin,
+        "Access-Control-Request-Method": "GET",
+      },
+    });
+
+    assert.equal(response.status, 204);
+    assert.equal(response.headers.get("access-control-allow-origin"), origin);
+  } finally {
+    if (originalCorsOrigin === undefined) {
+      delete process.env.CORS_ORIGIN;
+    } else {
+      process.env.CORS_ORIGIN = originalCorsOrigin;
+    }
+  }
+});
+
 test("reservation endpoint rejects invalid request data", async () => {
   const response = await fetch(`${await apiUrl}/reservations`, {
     method: "POST",

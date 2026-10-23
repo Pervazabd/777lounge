@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { fileURLToPath } from "node:url";
 import app from "./app.js";
 import { connectDatabase } from "./config/database.js";
+import { ensureMenuCatalog } from "./services/menuCatalog.js";
 
 dotenv.config({ path: fileURLToPath(new URL("../.env", import.meta.url)) });
 
@@ -10,6 +11,7 @@ const port = Number(process.env.PORT) || 5000;
 
 async function startServer() {
   await connectDatabase(process.env.MONGODB_URI);
+  await ensureMenuCatalog();
 
   const server = app.listen(port, () => {
     console.info(`777 Lounge API listening on port ${port}.`);

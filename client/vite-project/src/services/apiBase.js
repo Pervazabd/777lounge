@@ -1,7 +1,7 @@
 const configuredApiUrl = (import.meta.env.VITE_API_URL || "")
     .trim()
     .replace(/\/+$/, "");
-const productionApiUrl = "https://seven77lounge-3.onrender.com";
+const productionApiUrl = "https://seven77lounge-8.onrender.com";
 
 function isLocalApiUrl(apiUrl) {
     try {

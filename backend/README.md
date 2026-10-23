@@ -25,25 +25,25 @@ Start the API in development mode:
 npm run dev
 ```
 
-Populate or refresh the menu catalog in MongoDB:
+On startup, the API seeds the initial menu into MongoDB only when the menu collection is empty. After that, menu reads and admin changes use MongoDB; restarting or redeploying the API does not replace stored products. To manually populate or refresh the catalog:
 
 ```powershell
 npm run seed
 ```
 
-The seed is idempotent: it inserts or updates the listed products without deleting other records. Prices are stored as numeric Turkish lira amounts (`currency: "TRY"`), with category/order, description, listed ingredients, and a category-matched Unsplash stock image URL. The catalog is available at `GET /api/products`; use `GET /api/products?category=burgerler` to filter by category slug.
+The seed is idempotent: it inserts or updates the listed products without deleting other records. The files under `src/data` are only the initial catalog used to seed MongoDB, not a runtime data store. Prices are stored as numeric Turkish lira amounts (`currency: "TRY"`), with category/order, description, listed ingredients, and a category-matched Unsplash stock image URL. The catalog is available at `GET /api/products`; use `GET /api/products?category=burgerler` to filter by category slug.
 
 The API listens on `http://localhost:5000` by default. The Vite development server proxies `/api` requests to it.
 For a separately hosted frontend, set `VITE_API_URL` to the API's public base URL in the frontend environment and set `CORS_ORIGIN` to the frontend's origin.
 
 ## Production deployment
 
-For the deployed frontend and API, configure:
+For the deployed frontend and API, configure these values (use your actual public frontend origin if it changes):
 
-- Vercel frontend environment variable: `VITE_API_URL=https://seven77lounge-3.onrender.com`
-- Render API environment variable: `CORS_ORIGIN=https://777lounge.vercel.app`
+- Vercel frontend environment variable: `VITE_API_URL=https://seven77lounge-8.onrender.com`
+- Render API environment variable: `CORS_ORIGIN=https://777lounge-hozl.vercel.app`
 
-Set the Vercel variable for every environment used to deploy the site, then redeploy so Vite can include the public API URL in the frontend build. The frontend falls back to the Render API URL in production if `VITE_API_URL` is unset or points to a local address; local development continues to use the Vite `/api` proxy when the variable is unset.
+Set `MONGODB_URI` on Render to a MongoDB Atlas connection string and allow the Render service to connect in Atlas Network Access. Set `ADMIN_API_KEY` to a long random secret. Set the Vercel variable for every environment used to deploy the site, then redeploy so Vite can include the public API URL in the frontend build. The frontend falls back to the same Render API URL in production if `VITE_API_URL` is unset or points to a local address; local development continues to use the Vite `/api` proxy when the variable is unset.
 
 ## Endpoints
 

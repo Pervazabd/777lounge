@@ -6,13 +6,14 @@ import apiRouter from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFound } from "./middleware/notFound.js";
 
-const allowedOrigins = (
-  process.env.CORS_ORIGIN ||
-  "https://seven77lounge-8.onrender.com/"
-)
-  .split(",")
-  .map((origin) => origin.trim().replace(/\/$/, ""))
-  .filter(Boolean);
+function getAllowedOrigins() {
+  return [
+    "https://777lounge-hozl.vercel.app",
+    ...(process.env.CORS_ORIGIN || "").split(","),
+  ]
+    .map((origin) => origin.trim().replace(/\/$/, ""))
+    .filter(Boolean);
+}
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.disable("x-powered-by");
 app.use(helmet());
 app.use(cors({
   origin(origin, callback) {
-    callback(null, !origin || allowedOrigins.includes(origin));
+    callback(null, !origin || getAllowedOrigins().includes(origin));
   },
 }));
 app.use(express.json({ limit: "10kb" }));
