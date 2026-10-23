@@ -163,7 +163,7 @@ export default function About() {
                         >
                             <div className="absolute -bottom-4 -left-4 right-10 top-10 border border-[#d8c4a0]/35 sm:-bottom-6 sm:-left-6 sm:right-14 sm:top-14" />
 
-                            <video
+                            {/* <video
                                 aria-label={t("about.imageAlt")}
                                 autoPlay
                                 muted
@@ -173,7 +173,7 @@ export default function About() {
                                 className="relative aspect-[4/3] w-full object-cover"
                             >
                                 <source src={aboutVideo} type="video/mp4" />
-                            </video>
+                            </video> */}
 
                             {/* 777 Lounge rozeti */}
                             <div
