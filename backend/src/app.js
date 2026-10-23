@@ -6,14 +6,18 @@ import apiRouter from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFound } from "./middleware/notFound.js";
 
+
 function getAllowedOrigins() {
   return [
-    "https://seven77lounge-8.onrender.com/api/products",
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://777lounge-jc4u.vercel.app",
     ...(process.env.CORS_ORIGIN || "").split(","),
   ]
     .map((origin) => origin.trim().replace(/\/$/, ""))
     .filter(Boolean);
 }
+
 
 const app = express();
 
