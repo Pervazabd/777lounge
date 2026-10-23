@@ -12,6 +12,7 @@ const allowedOrigins = [
   "https://777lounge4.mrpandomim.workers.dev",
   "https://777loungemenu.com",
   "https://www.777loungemenu.com",
+  "https://seven77lounge-8.onrender.com",
 ];
 
 const app = express();
