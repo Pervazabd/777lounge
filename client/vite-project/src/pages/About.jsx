@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Navbar from "../layout/clinet/navbar.jsx";
 import { useLanguage } from "../useLanguage.js";
 import AppLink from "../AppLink.jsx";
-import aboutVideo from "../assets/131025 reels 777.mp4";
 
 export default function About() {
     const { t } = useLanguage();
