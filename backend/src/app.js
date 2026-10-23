@@ -8,7 +8,7 @@ import { notFound } from "./middleware/notFound.js";
 
 function getAllowedOrigins() {
   return [
-    "https://777lounge-hozl.vercel.app",
+    "https://seven77lounge-8.onrender.com/api/products",
     ...(process.env.CORS_ORIGIN || "").split(","),
   ]
     .map((origin) => origin.trim().replace(/\/$/, ""))
