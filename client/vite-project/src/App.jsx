@@ -16,7 +16,7 @@ function AppContent() {
   const path = location.pathname
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsLoading(false), 1300)
+    const timer = window.setTimeout(() => setIsLoading(false), 2200)
     return () => window.clearTimeout(timer)
   }, [])
 
