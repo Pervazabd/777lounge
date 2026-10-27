@@ -168,11 +168,6 @@ export default function Menu({ categoryId = null }) {
                     </p>
                 )}
 
-                <footer className="mt-14 border-t border-white/[0.08] pt-6 text-center sm:mt-20">
-                    <p className="text-[10px] leading-6 tracking-wide text-white/35 sm:text-xs">
-                        {t("menu.disclaimer")}
-                    </p>
-                </footer>
             </div>
         </section>
     );
