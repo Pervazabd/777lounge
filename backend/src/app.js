@@ -7,13 +7,23 @@ import apiRouter from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { notFound } from "./middleware/notFound.js";
 
-const allowedOrigins = [
+const defaultAllowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "https://777lounge4.mrpandomim.workers.dev",
+  "https://777lounge-hozl.vercel.app",
   "https://777loungemenu.com",
   "https://www.777loungemenu.com",
 ];
+
+function getAllowedOrigins() {
+  const configuredOrigins = (process.env.CORS_ORIGIN || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  return new Set([...defaultAllowedOrigins, ...configuredOrigins]);
+}
 
 const app = express();
 
@@ -23,7 +33,7 @@ app.disable("x-powered-by");
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || getAllowedOrigins().has(origin)) {
         return callback(null, true);
       }
 

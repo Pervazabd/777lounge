@@ -41,9 +41,9 @@ For a separately hosted frontend, set `VITE_API_URL` to the API's public base UR
 For the deployed frontend and API, configure these values (use your actual public frontend origin if it changes):
 
 - Vercel frontend environment variable: `VITE_API_URL=https://seven77lounge-8.onrender.com`
-- Render API environment variable: `CORS_ORIGIN=https://777lounge-hozl.vercel.app`
+- Render API environment variable: `CORS_ORIGIN=https://777loungemenu.com,https://www.777loungemenu.com,https://777lounge-hozl.vercel.app`
 
-Set `MONGODB_URI` on Render to a MongoDB Atlas connection string and allow the Render service to connect in Atlas Network Access. Set `ADMIN_API_KEY` to a long random secret. Set the Vercel variable for every environment used to deploy the site, then redeploy so Vite can include the public API URL in the frontend build. The frontend falls back to the same Render API URL in production if `VITE_API_URL` is unset or points to a local address; local development continues to use the Vite `/api` proxy when the variable is unset.
+Set `MONGODB_URI` on Render to a MongoDB Atlas connection string and allow the Render service to connect in Atlas Network Access. Set `ADMIN_API_KEY` to a long random secret. After changing backend CORS settings, redeploy the Render API; changing the frontend alone will not update the API's preflight response. Set the Vercel variable for every environment used to deploy the site, then redeploy so Vite can include the public API URL in the frontend build. The frontend falls back to the same Render API URL in production if `VITE_API_URL` is unset or points to a local address; local development continues to use the Vite `/api` proxy when the variable is unset.
 
 ## Endpoints
 

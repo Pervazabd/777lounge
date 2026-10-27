@@ -21,18 +21,23 @@ test("health endpoint reports that MongoDB is not ready", async () => {
   assert.equal(result.data.database, "disconnected");
 });
 
-test("CORS allows the deployed Vercel frontend", async () => {
-  const origin = "https://777lounge-hozl.vercel.app";
+test("CORS preflight allows the deployed frontend and admin key header", async () => {
+  const origin = "https://777loungemenu.com";
   const response = await fetch(`${await apiUrl}/products`, {
     method: "OPTIONS",
     headers: {
       Origin: origin,
       "Access-Control-Request-Method": "GET",
+      "Access-Control-Request-Headers": "x-admin-key",
     },
   });
 
   assert.equal(response.status, 204);
   assert.equal(response.headers.get("access-control-allow-origin"), origin);
+  assert.match(
+    response.headers.get("access-control-allow-headers") || "",
+    /x-admin-key/i,
+  );
 });
 
 test("CORS reads configured origins after the app has loaded", async () => {
@@ -46,11 +51,16 @@ test("CORS reads configured origins after the app has loaded", async () => {
       headers: {
         Origin: origin,
         "Access-Control-Request-Method": "GET",
+        "Access-Control-Request-Headers": "x-admin-key",
       },
     });
 
     assert.equal(response.status, 204);
     assert.equal(response.headers.get("access-control-allow-origin"), origin);
+    assert.match(
+      response.headers.get("access-control-allow-headers") || "",
+      /x-admin-key/i,
+    );
   } finally {
     if (originalCorsOrigin === undefined) {
       delete process.env.CORS_ORIGIN;
