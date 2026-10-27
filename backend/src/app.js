@@ -1,4 +1,3 @@
-
 import cors from "cors";
 import express from "express";
 import rateLimit from "express-rate-limit";
@@ -14,7 +13,6 @@ const allowedOrigins = [
   "https://777lounge4.mrpandomim.workers.dev",
   "https://777loungemenu.com",
   "https://www.777loungemenu.com",
-  "https://seven77lounge-8.onrender.com/api/products",
 ];
 
 const app = express();
@@ -33,7 +31,11 @@ app.use(
       return callback(null, false);
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "x-admin-key",
+    ],
     credentials: true,
     optionsSuccessStatus: 204,
   })
