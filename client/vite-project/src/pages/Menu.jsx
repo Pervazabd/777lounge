@@ -5,6 +5,7 @@ import CategoryNavigation from "../components/menu/CategoryNavigation.jsx";
 import MenuHeader from "../components/menu/MenuHeader.jsx";
 import MenuViewControls from "../components/menu/MenuViewControls.jsx";
 import ProductDisplay from "../components/menu/ProductDisplay.jsx";
+import ProductSkeleton from "../components/menu/ProductSkeleton.jsx";
 
 const HOOKAH_CATEGORY_ID = "nargile";
 
@@ -133,9 +134,7 @@ export default function Menu({ categoryId = null }) {
                 <MenuHeader isHookahMenu={categoryId === HOOKAH_CATEGORY_ID} />
 
                 {loading ? (
-                    <p role="status" className="mt-12 text-center text-sm text-white/50">
-                        {t("menu.loading")}
-                    </p>
+                    <ProductSkeleton />
                 ) : loadError ? (
                     <p role="alert" className="mt-12 text-center text-sm text-white/50">
                         {t("menu.loadError")}

@@ -3,6 +3,7 @@ import { LanguageContext } from "./language-context.js";
 
 const translations = {
     tr: {
+        "app.loading": "Güzel anlar hazırlanıyor",
         "seo.description": "777 Lounge — lezzet, keyif ve güzel anlar için.",
         "nav.language": "Dil seçimi",
         "nav.home": "Ana Sayfa",
@@ -107,6 +108,7 @@ const translations = {
         "reservation.mapFooter": "777 Lounge · Sizi bekliyoruz",
     },
     en: {
+        "app.loading": "A good moment is brewing",
         "seo.description": "777 Lounge — great flavors, good company and memorable moments.",
         "nav.language": "Choose language",
         "nav.home": "Home",
