@@ -6,7 +6,7 @@ import reservationImage from "../assets/EKO06195.png";
 import { useLanguage } from "../useLanguage.js";
 import { submitReservation } from "../services/reservations.js";
 
-const WHATSAPP_NUMBER = "905541360918";
+const WHATSAPP_NUMBER = "905334997211";
 const LOUNGE_MAP_LINK = "https://share.google/jPCFjM8YGCXbSanEO";
 
 const timeOptions = [
